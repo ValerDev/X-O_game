@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>X O game</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="popUpMain" id='popUpMain'>
+        <div class='popUp' id='popUp'>
+            <div class="choose_item" id="chooseitem">
+                <div class='X-item' id='x' value='x' onclick="chooseX()"></div>
+                <div class='O-item' id='o' value='o' onclick="chooseY()""></div>
+                </div>
+                 <div class=" start-btn" id='startBtn' onclick='startClick()' value="Start_game">START GAME</div>
+            </div>
+        </div>
+        <div class='overlay' id='overlay'>
+            <div class="text">please wait...your PC is thinking now</div>
+        </div>
+        <div class="Winner" id="Winner" onclick="replay()">
+            <div class="WinText" id="WinText"> YOU WIN <br /><br /> <br /><br /><br /><br />click to replay </div>
+            <div class="LoseText" id="LoseText"> YOU LOSE <br /><br /><br /><br /><br /><br /> click to replay</div>
+            <div class="EndText" id="EndText"> GAME END <br /><br /> click to replay</div>
+
+        </div>
+        <div class=" XO-main" id="XO-main"> </div>
+        <script src="XO_game.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+*{
+	padding:0;
+	margin:0;
+	box-sizing:border-box;
+    font-family: 'Raleway', sans-serif;
+}
+body{
+
+	width:100%;
+	height:100%;
+	background-color:#e5e5e5;
+}
+.XO-main{
+    border: 2px solid #5c007a;
+    border-radius: 3px;
+    display: grid;
+    grid-template-columns: repeat(3 , auto);
+    margin-left: 27.5%;
+    margin-top: 1.5%;
+    background-color: white;
+    width: 600px;
+    height: 600px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) ;
+}
+.XO-item{
+    width: 150px;
+    height: 150px;
+    border: 2px solid #757575;
+}
+.start-btn{
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    position: fixed;   
+    width: 450px;
+    height: 60px;
+    color: #ffffff;
+    background-color: #5c007a    ;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) ;
+    margin-left: 2%;
+    margin-top: 3%;
+    font-size: 3em;
+}
+.start-btn:hover{
+    background-color: #8e24aa;
+}
+.start-btn:active{
+    margin-top: 3.2%;
+
+}
+/*
+* choose X or Y
+*/
+.choose_item{
+    display: flex;
+    margin-top: 8%;
+  margin-left: 28.5%;
+
+
+
+}
+.X-item{
+    background-image: url(./x-icon.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-radius: 20px;
+     width: 100px;
+    height: 100px;
+    background-color: #c158dc;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) ;
+
+
+}
+.X-item:hover{
+    background-color: #8e24aa;
+}
+.X-item:active{
+margin-top: 0.5%;
+}
+.O-item{
+    background-image: url(./o-icon.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 5%;
+    width: 100px;
+    height: 100px;
+    background-color: #c158dc;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) ;
+
+}
+.O-item:hover{
+    background-color: #8e24aa;
+}
+.O-item:active{
+    margin-top: 0.5%;
+}
+.MatrixElements:hover{
+    background-color: #e5e5e5;
+}
+.overlay{
+    top: 0;
+    text-align: center;
+    opacity: 0;
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.863);
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    transition: 1s;    
+}
+    .text{
+        transition: 1s;
+        margin-top: 20%;
+    }
+
+    /*
+    * winning message
+    */
+    .Winner{
+        cursor: pointer;
+        top: 0;
+        text-align: center;
+        opacity: 0;
+        justify-content:center;
+        position: absolute;
+        background-color: rgba(128, 128, 128, 0.863);
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        overflow: hidden;
+        transition: 1s;    
+    }
+       .WinText{
+            cursor: pointer;
+            color: #000;
+            opacity: 0;
+            font-size: 3em;
+            transition: 1s;
+            margin-top: 15%;
+      }
+        .LoseText{
+            cursor: pointer;
+            opacity: 0;
+            font-size: 3em;
+            transition: 1s;
+            margin-top: -28%;
+        }
+        .EndText{
+            cursor: pointer;
+            margin-top: -25%;
+            opacity: 0;
+            font-size: 1.5em;
+            transition: 1s;
+        }
+
+    .popUpMain{
+        top: 0;
+        text-align: center;
+        opacity: 1;
+        position: absolute;
+        background-color: rgba(128, 128, 128, 0.863);
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        overflow: hidden;
+        transition: 1s;    
+    }
+
+    .popUp{
+        transition: 1s;    
+        position: fixed;
+        top: 20%; 
+        left: 31.2%;  
+        background-color: #9C27B0;
+        width: 500px;
+        height: 260px;
+        border-radius: 20px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) ;
+}
