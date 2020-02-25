@@ -1,6 +1,13 @@
 /*
  *  create game zone 
  */
+let winMatrix = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+]
+let step = 0;
+let pc = false;
 let Matrix = [];
 let start = false;
 let x = false;
@@ -36,16 +43,16 @@ const createMatrix = () => {
  * choose X or O 
  */
 const chooseX = () => {
-    console.log(Matrix)
     document.getElementById('x').style.backgroundColor = '#8e24aa';
     document.getElementById('o').style.backgroundColor = '#757575';
     x = true
+    o = false
 }
 const chooseY = () => {
-    console.log(Matrix)
     document.getElementById('o').style.backgroundColor = '#8e24aa';
     document.getElementById('x').style.backgroundColor = '#757575';
     o = true
+    x = false
 }
 /*
 * start game
@@ -63,82 +70,81 @@ const startClick = () => {
         document.getElementById('popUpMain').style.opacity = '0'
         document.getElementById('popUpMain').style.zIndex = '-1'
         document.getElementById('startBtn').style.zIndex = '-3';
-        PCplayX()
-   }
+        PCplay()
+    }
     else {
         alert('please choose X or O')
     }
 };
 const check = () => {
-        if (start && o) {
-        Matrix.map(el => {
-            el.map(el => {
+    step++
+    if ((start && o) || (start && x)) {
+        Matrix.map(element => {
+            element.map(el => {
                 el.onclick = () => {
+                    winMatrix[Matrix.indexOf(element)][element.indexOf(el)] = 1;
                     document.getElementById('overlay').style.opacity = '1';
                     document.getElementById('overlay').style.zIndex = '1';
                     document.getElementById('overlay').style.cursor = 'wait';
-                    el.innerText = 'O'
                     el.style.pointerEvents = 'none'
-                    fO()
-                }
-            })
-        })
-    } else if (start && x) {
-        Matrix.map(el => {
-            el.map(el => {
-                el.onclick = () => {
-                    document.getElementById('overlay').style.opacity = '1';
-                    document.getElementById('overlay').style.zIndex = '1';
-                    document.getElementById('overlay').style.cursor = 'wait';
-                    el.innerText = 'X'
-                    el.style.pointerEvents = 'none'
-                    fX()
+                    if (x) {
+                        pc = true
+                        el.innerText = 'X'
+                        checkWinner()
+                    } else if (o) {
+                        pc = true
+                        el.innerText = 'O'
+                        checkWinner()
+                    }
                 }
             })
         })
     }
-    else {
-        alert('please choose X or O, and click to Start')
+}
+const PCplay = () => {
+    setTimeout(() => {
+        let xPos = Math.floor(Math.random() * 3);
+        let yPos = Math.floor(Math.random() * 3);
+        if ((Matrix[xPos][yPos].innerText === '' && o) || (Matrix[xPos][yPos].innerText === '' && x)) {
+            Matrix[xPos][yPos].style.pointerEvents = 'none'
+            document.getElementById('overlay').style.cursor = 'wait';
+            document.getElementById('overlay').style.opacity = '0';
+            document.getElementById('overlay').style.zIndex = '-1';
+            if (o) {
+                Matrix[xPos][yPos].innerText = 'X'
+                step++
+                Matrix.map(el => {
+                    el.map(el => {
+                        if ((el.innerText === 'X' && o) || (el.innerText === 'O' && x)) {
+                            winMatrix[xPos][yPos] = 2;
+                        }
+                    })
+                })
+                checkWinner()
+            } else if (x) {
+                Matrix[xPos][yPos].innerText = 'O'
+                step++
+                Matrix.map(el => {
+                    el.map(el => {
+                        if ((el.innerText === 'X' && o) || (el.innerText === 'O' && x)) {
+                            winMatrix[xPos][yPos] = 2;
+                        }
+                    })
+                })
+                checkWinner()
+
+            }
+        } else {
+            PCplay()
+            checkWinner()
+        }
     }
-}
-const PCplayX = () => {
-    setTimeout(() => {
-        let xPos = Math.floor(Math.random() * 3);
-        let yPos = Math.floor(Math.random() * 3);
-        if (Matrix[xPos][yPos].innerText === '') {
-            Matrix[xPos][yPos].innerText = 'X'
-            Matrix[xPos][yPos].style.pointerEvents = 'none'
-            document.getElementById('overlay').style.cursor = 'wait';
-            document.getElementById('overlay').style.opacity = '0';
-            document.getElementById('overlay').style.zIndex = '-1';
-            checkPC_O()
-        } else {
-            checkPC_O()
-            PCplayX()
-        }
-    }, 1000)
-}
-const PCplayO = () => {
-    setTimeout(() => {
-        let xPos = Math.floor(Math.random() * 3);
-        let yPos = Math.floor(Math.random() * 3);
-        if (Matrix[xPos][yPos].innerText === '') {
-            Matrix[xPos][yPos].innerText = 'O'
-            Matrix[xPos][yPos].style.pointerEvents = 'none'
-            document.getElementById('overlay').style.cursor = 'wait';
-            document.getElementById('overlay').style.opacity = '0';
-            document.getElementById('overlay').style.zIndex = '-1';
-            checkPC_X()
-        } else {
-            checkPC_X()
-            PCplayO()
-        }
-    }, 1000)
+        , 1000)
 }
 /*
 * checking winner
 */
-const fO = () => {
+const checkWinner = () => {
     if ((Matrix[0][0].innerText === Matrix[0][1].innerText && Matrix[0][1].innerText === Matrix[0][2].innerText && Matrix[0][0].innerText === 'O') ||
         (Matrix[1][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[1][2].innerText && Matrix[1][0].innerText === 'O') ||
         (Matrix[2][0].innerText === Matrix[2][1].innerText && Matrix[2][1].innerText === Matrix[2][2].innerText && Matrix[2][0].innerText === 'O') ||
@@ -148,64 +154,18 @@ const fO = () => {
         (Matrix[0][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][2].innerText && Matrix[1][1].innerText === 'O') ||
         (Matrix[0][2].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][0].innerText && Matrix[0][2].innerText === 'O')
     ) {
-        document.getElementById('Winner').style.opacity = '1';
-        document.getElementById('Winner').style.zIndex = '2';
-        document.getElementById('WinText').style.opacity = '1';
-        document.getElementById('overlay').style.opacity = '0';
-        Matrix.forEach(element => {
-            element.forEach(e => {
-                console.log(e)
-            })
-
-        });
-
-    } else if (Matrix[0][0].innerText !== '' && Matrix[0][1].innerText !== '' && Matrix[0][2].innerText !== '' &&
-        Matrix[1][0].innerText !== '' && Matrix[1][1].innerText !== '' && Matrix[1][2].innerText !== '' &&
-        Matrix[2][0].innerText !== '' && Matrix[2][1].innerText !== '' && Matrix[2][2].innerText !== ''
-    ) {
-        document.getElementById('Winner').style.opacity = '1';
-        document.getElementById('Winner').style.zIndex = '2';
-        document.getElementById('EndText').style.opacity = '1';
-        document.getElementById('overlay').style.opacity = '0';
-
-    }
-    else {
-        PCplayX()
-    }
-}
-const fX = () => {
-    if ((Matrix[0][0].innerText === Matrix[0][1].innerText && Matrix[0][1].innerText === Matrix[0][2].innerText && Matrix[0][0].innerText === 'X') ||
-        (Matrix[1][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[1][2].innerText && Matrix[1][0].innerText === 'X') ||
-        (Matrix[2][0].innerText === Matrix[2][1].innerText && Matrix[2][1].innerText === Matrix[2][2].innerText && Matrix[2][0].innerText === 'X') ||
-        (Matrix[0][2].innerText === Matrix[1][2].innerText && Matrix[1][2].innerText === Matrix[2][2].innerText && Matrix[2][2].innerText === 'X') ||
-        (Matrix[0][1].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][1].innerText && Matrix[0][1].innerText === 'X') ||
-        (Matrix[0][0].innerText === Matrix[1][0].innerText && Matrix[1][0].innerText === Matrix[2][0].innerText && Matrix[2][0].innerText === 'X') ||
-        (Matrix[0][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][2].innerText && Matrix[1][1].innerText === 'X') ||
-        (Matrix[0][2].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][0].innerText && Matrix[0][2].innerText === 'X')
-    ) {
-        document.getElementById('Winner').style.opacity = '1';
-        document.getElementById('Winner').style.zIndex = '2';
-        document.getElementById('WinText').style.opacity = '1';
-        document.getElementById('overlay').style.opacity = '0';
-
-    } else if (Matrix[0][0].innerText !== '' && Matrix[0][1].innerText !== '' && Matrix[0][2].innerText !== '' &&
-        Matrix[1][0].innerText !== '' && Matrix[1][1].innerText !== '' && Matrix[1][2].innerText !== '' &&
-        Matrix[2][0].innerText !== '' && Matrix[2][1].innerText !== '' && Matrix[2][2].innerText !== ''
-    ) {
-        document.getElementById('Winner').style.opacity = '1';
-        document.getElementById('Winner').style.zIndex = '2';
-        document.getElementById('EndText').style.opacity = '1';
-        document.getElementById('overlay').style.opacity = '0';
-
-    } else {
-        PCplayO()
-    }
-}
-/*
-*Check PC winner???
-*/
-const checkPC_O = () => {
-    if (
+        if (o && !x) {
+            document.getElementById('Winner').style.opacity = '1';
+            document.getElementById('Winner').style.zIndex = '2';
+            document.getElementById('WinText').style.opacity = '1';
+            document.getElementById('overlay').style.opacity = '0';
+        } else {
+            document.getElementById('Winner').style.opacity = '1';
+            document.getElementById('Winner').style.zIndex = '2';
+            document.getElementById('LoseText').style.opacity = '1';
+            document.getElementById('overlay').style.opacity = '0';
+        }
+    } else if (
         (Matrix[0][0].innerText === Matrix[0][1].innerText && Matrix[0][1].innerText === Matrix[0][2].innerText && Matrix[0][0].innerText === 'X') ||
         (Matrix[1][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[1][2].innerText && Matrix[1][0].innerText === 'X') ||
         (Matrix[2][0].innerText === Matrix[2][1].innerText && Matrix[2][1].innerText === Matrix[2][2].innerText && Matrix[2][0].innerText === 'X') ||
@@ -215,12 +175,20 @@ const checkPC_O = () => {
         (Matrix[0][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][2].innerText && Matrix[1][1].innerText === 'X') ||
         (Matrix[0][2].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][0].innerText && Matrix[0][2].innerText === 'X')
     ) {
-        document.getElementById('Winner').style.opacity = '1';
-        document.getElementById('Winner').style.zIndex = '2';
-        document.getElementById('LoseText').style.opacity = '1';
-        document.getElementById('overlay').style.opacity = '0';
-
-    } else if (Matrix[0][0].innerText !== '' && Matrix[0][1].innerText !== '' && Matrix[0][2].innerText !== '' &&
+        if (x && !o) {
+            document.getElementById('Winner').style.opacity = '1';
+            document.getElementById('Winner').style.zIndex = '2';
+            document.getElementById('WinText').style.opacity = '1';
+            document.getElementById('overlay').style.opacity = '0';
+        } else {
+            document.getElementById('Winner').style.opacity = '1';
+            document.getElementById('Winner').style.zIndex = '2';
+            document.getElementById('LoseText').style.opacity = '1';
+            document.getElementById('overlay').style.opacity = '0';
+        }
+    }
+    else if (
+        Matrix[0][0].innerText !== '' && Matrix[0][1].innerText !== '' && Matrix[0][2].innerText !== '' &&
         Matrix[1][0].innerText !== '' && Matrix[1][1].innerText !== '' && Matrix[1][2].innerText !== '' &&
         Matrix[2][0].innerText !== '' && Matrix[2][1].innerText !== '' && Matrix[2][2].innerText !== ''
     ) {
@@ -229,35 +197,12 @@ const checkPC_O = () => {
         document.getElementById('EndText').style.opacity = '1';
         document.getElementById('overlay').style.opacity = '0';
     }
-}
-const checkPC_X = () => {
-    if (
-        (Matrix[0][0].innerText === Matrix[0][1].innerText && Matrix[0][1].innerText === Matrix[0][2].innerText && Matrix[0][0].innerText === 'O') ||
-        (Matrix[1][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[1][2].innerText && Matrix[1][0].innerText === 'O') ||
-        (Matrix[2][0].innerText === Matrix[2][1].innerText && Matrix[2][1].innerText === Matrix[2][2].innerText && Matrix[2][0].innerText === 'O') ||
-        (Matrix[0][2].innerText === Matrix[1][2].innerText && Matrix[1][2].innerText === Matrix[2][2].innerText && Matrix[2][2].innerText === 'O') ||
-        (Matrix[0][1].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][1].innerText && Matrix[0][1].innerText === 'O') ||
-        (Matrix[0][0].innerText === Matrix[1][0].innerText && Matrix[1][0].innerText === Matrix[2][0].innerText && Matrix[2][0].innerText === 'O') ||
-        (Matrix[0][0].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][2].innerText && Matrix[1][1].innerText === 'O') ||
-        (Matrix[0][2].innerText === Matrix[1][1].innerText && Matrix[1][1].innerText === Matrix[2][0].innerText && Matrix[0][2].innerText === 'O')
-    ) {
-        document.getElementById('Winner').style.opacity = '1';
-        document.getElementById('Winner').style.zIndex = '2';
-        document.getElementById('LoseText').style.opacity = '1';
-        document.getElementById('overlay').style.opacity = '0';
-
-    } else if (Matrix[0][0].innerText !== '' && Matrix[0][1].innerText !== '' && Matrix[0][2].innerText !== '' &&
-        Matrix[1][0].innerText !== '' && Matrix[1][1].innerText !== '' && Matrix[1][2].innerText !== '' &&
-        Matrix[2][0].innerText !== '' && Matrix[2][1].innerText !== '' && Matrix[2][2].innerText !== ''
-    ) {
-        document.getElementById('Winner').style.opacity = '1';
-        document.getElementById('Winner').style.zIndex = '2';
-        document.getElementById('EndText').style.opacity = '1';
-        document.getElementById('overlay').style.opacity = '0';
+    else if (pc) {
+        PCplay()
+        pc = false
     }
 }
 const replay = () => {
-
     document.getElementById('popUpMain').style.opacity = '1'
     document.getElementById('popUpMain').style.zIndex = '1'
     document.getElementById('x').style.backgroundColor = '#c158dc';
@@ -273,22 +218,21 @@ const replay = () => {
     x = false;
     o = false;
     start = false;
-
-
+    pc = false;
     Matrix.forEach(e => {
         e.forEach(el => {
             el.innerText = ' '
         })
     })
-
-
     for (let i = 1; i < 10; i++) {
         document.getElementById(i).remove()
     }
     for (let i = 0; i < 3; i++) {
         Matrix.shift()
     }
-    console.log(Matrix)
+    winMatrix = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]
 }
-
-
